@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "nodemon --legacy-watch ./bin/www",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha",
+    "ci": "start-server-and-test start 8080 mocha"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -13,10 +15,13 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^8.0.1"
+    "mocha": "^7.1.1",
+    "requests": "^0.3.0",
+    "start-server-and-test": "^1.11.2"
   }
 }

@@ -13,7 +13,8 @@ spec:
         app: web
     spec:
       containers:
-      - name: nginx
+      - name: sentry-health
+        # Assuming Dockerhub container registry
         image: calvinedwards/sentryhealth:1.0.0
         ports:
         - containerPort: 80

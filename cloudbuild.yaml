@@ -1,9 +1,20 @@
 steps:
 - id: 'Sentry App Install'
   name: 'gcr.io/cloud-builders/npm'
+  entrypoint: 'npm'
   dir: '.'
   args: ['install']
   waitFor: ['-']
+
+- id: 'Sentry App Test'
+  name: 'gcr.io/cloud-builders/npm'
+  entrypoint: 'npm'
+  args: [
+    'run',
+    'ci'
+  ]
+  timeout: '30s'
+  waitFor: ['Sentry App Install']
 
 - id: 'Sentry App Build'
   name: 'gcr.io/cloud-builders/docker'
@@ -14,10 +25,18 @@ steps:
     '--cache-from', 'gcr.io/$PROJECT_ID/web:latest',
     '.'
   ]
-  waitFor: ['Sentry App Install']
+  waitFor: ['Sentry App Test']
+
+- id: 'Sentry App Push'
+  name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/web:latest']
+  waitFor: ['Sentry App Build']
 
 - id: 'Deploy to Google App Engine'
   name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', '--image-url=gcr.io/$PROJECT_ID/web']
+  entrypoint: 'gcloud'
+  args: ['app', 'deploy', '--image-url=gcr.io/$PROJECT_ID/web:latest']
   timeout: '600s'
-  waitFor: ['Sentry App Build']
+  waitFor: ['Sentry App Push']
+
+images: ['gcr.io/$PROJECT_ID/web:latest']
