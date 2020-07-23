@@ -1,0 +1,17 @@
+# From Lightweight node image
+FROM node:alpine
+
+# Create /app folder in root to prevent overwriting necessary binaries
+WORKDIR '/app'
+
+# Copy and install the packages
+COPY ./package.json ./
+RUN npm install
+
+# Copy the current directory contents
+COPY . .
+
+ENV PORT=8080
+
+# Default command
+CMD ["npm", "run", "dev"]

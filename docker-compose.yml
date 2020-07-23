@@ -1,0 +1,10 @@
+version: '3'
+services:
+  sentry-app:
+    build:
+      # Change this between Development and Production
+      dockerfile: Dockerfile.dev
+      context: ./
+    restart: always
+    ports:
+      - '8080:8080'
